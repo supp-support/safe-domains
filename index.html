@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're in the wrong place</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a1a'/><circle cx='16' cy='20' r='3.5' fill='%23facc15'/></svg>">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #fff;
+    color: #1a1a1a;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 15vh 24px 48px;
+  }
+
+  @media (min-width: 768px) {
+    main {
+      max-width: 640px;
+      padding: 18vh 24px 80px;
+    }
+    .query { font-size: 44px; }
+    .what-happened { font-size: 17px; max-width: 500px; }
+    .search-buttons { gap: 14px; }
+    .search-btn { padding: 16px 32px; font-size: 16px; }
+    .footer { margin-top: 80px; }
+  }
+
+  @media (min-width: 1200px) {
+    main {
+      max-width: 680px;
+      padding: 20vh 24px 100px;
+    }
+    .query { font-size: 48px; }
+  }
+
+  .query-block {
+    margin-bottom: 48px;
+  }
+
+  .you-typed {
+    font-size: 15px;
+    color: #9ca3af;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+
+  .typed-domain {
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Consolas', monospace;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .you-searched {
+    font-size: 15px;
+    color: #6b7280;
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  .query {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0a0a0a;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+
+  .nudge {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #6b7280;
+    margin-bottom: 36px;
+  }
+
+  .search-label {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .search-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 64px;
+  }
+
+  .search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .search-btn img {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .search-btn.google {
+    background: #f3f4f6;
+    color: #1a1a1a;
+  }
+  .search-btn.google:hover {
+    background: #e5e7eb;
+  }
+
+  .search-btn.bing {
+    background: #f3f4f6;
+    color: #1a1a1a;
+  }
+  .search-btn.bing:hover {
+    background: #e5e7eb;
+  }
+
+  .search-btn.ddg {
+    background: #f3f4f6;
+    color: #1a1a1a;
+  }
+  .search-btn.ddg:hover {
+    background: #e5e7eb;
+  }
+
+  /* sponsor / ad unit */
+  .ad-unit {
+    background: #fafafa;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 64px;
+    display: none;
+  }
+
+  .ad-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .ad-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: #1a1a1a;
+  }
+
+  .ad-card:hover .ad-name {
+    color: #2563eb;
+  }
+
+  .ad-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    object-fit: contain;
+    flex-shrink: 0;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    padding: 6px;
+  }
+
+  .ad-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ad-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #1a1a1a;
+    transition: color 0.15s;
+  }
+
+  .ad-desc {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+
+  .ad-cta {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+
+  .ad-card:hover .ad-cta {
+    background: #374151;
+  }
+
+  /* footer / why */
+  .footer {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 32px;
+  }
+
+  .footer p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #9ca3af;
+  }
+
+  .footer .message {
+    color: #6b7280;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+
+  .footer a {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .footer a:hover {
+    color: #1a1a1a;
+  }
+
+  .supp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: #fafafa;
+    border-radius: 999px;
+    font-size: 13px;
+    color: #6b7280 !important;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+
+  .supp-link:hover {
+    background: #f3f4f6;
+    color: #1a1a1a !important;
+  }
+
+  .supp-dot {
+    width: 6px;
+    height: 6px;
+    background: #facc15;
+    border-radius: 50%;
+  }
+
+  @media (max-width: 480px) {
+    main { padding: 10vh 20px 36px; }
+    .query { font-size: 28px; }
+    .search-btn { padding: 12px 22px; font-size: 14px; }
+    .search-buttons { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="query-block">
+    <p class="you-typed">You typed <span class="typed-domain" id="typed-domain"></span></p>
+    <p class="you-searched" id="you-searched">You meant to type something else.</p>
+    <p class="query" id="search-query">This isn't it. Let us help get you back there.</p>
+  </div>
+
+  <p class="nudge" id="nudge">You landed here by accident. We kept this page safe for you.</p>
+
+  <p class="search-label">Choose where to search</p>
+  <div class="search-buttons">
+    <a href="#" id="link-google" class="search-btn google">
+      <img src="https://www.google.com/favicon.ico" alt="" width="20" height="20">
+      Search Google
+    </a>
+    <a href="#" id="link-bing" class="search-btn bing">
+      <img src="https://www.bing.com/favicon.ico" alt="" width="20" height="20">
+      Bing
+    </a>
+    <a href="#" id="link-ddg" class="search-btn ddg">
+      <img src="https://duckduckgo.com/favicon.ico" alt="" width="20" height="20">
+      DuckDuckGo
+    </a>
+  </div>
+
+  <div class="ad-unit" id="ad-unit">
+    <p class="ad-label">Sponsored</p>
+    <a href="#" id="ad-link" class="ad-card">
+      <img src="" alt="" class="ad-icon" id="ad-icon">
+      <div class="ad-body">
+        <div class="ad-name" id="ad-name">Brand</div>
+        <div class="ad-desc" id="ad-desc">Short description of the product.</div>
+      </div>
+      <span class="ad-cta" id="ad-cta">Visit</span>
+    </a>
+  </div>
+
+  <div class="footer">
+    <p class="message">
+      We bought this domain so a scammer couldn't. No phishing page. No fake login. Just a way back to your search.
+    </p>
+    <p style="margin-bottom: 16px; color: #9ca3af;">
+      We care about humans. We make support software, and protect people on the web. Learn more about who we are and why we're doing this.
+    </p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+      <a href="https://supp.support/safe" class="supp-link">
+        Why we do this
+      </a>
+      <a href="https://supp.support" class="supp-link">
+        <span class="supp-dot"></span>
+        supp.support
+      </a>
+      <a href="https://github.com/supp-support/safe-domains" class="supp-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        v1.0.0
+      </a>
+    </div>
+  </div>
+</main>
+
+<script>
+(function() {
+  var host = location.hostname.toLowerCase();
+  if (host.startsWith('www.')) host = host.slice(4);
+  var parts = host.split('.');
+  if (parts.length < 2) return;
+
+  // last part is the TLD, everything before it is words the user typed
+  var tld = parts[parts.length - 1];
+  var words = parts.slice(0, -1);
+
+  var corrections = {
+    'liev': 'live', 'livw': 'live', 'livr': 'live', 'livd': 'live',
+    'livs': 'live', 'kive': 'live', 'lice': 'live', 'libe': 'live',
+    'lige': 'live', 'lve': 'live', 'lifve': 'live', 'livf': 'live',
+    'livg': 'live', 'livt': 'live', 'luive': 'live', 'liove': 'live',
+    'cusotmer': 'customer', 'custoemr': 'customer', 'custoner': 'customer',
+    'customet': 'customer', 'customee': 'customer', 'customwr': 'customer',
+    'custimer': 'customer', 'custome': 'customer', 'customr': 'customer',
+    'cuatomer': 'customer', 'cuetomer': 'customer', 'cudtomer': 'customer',
+    'cystomer': 'customer', 'cistomer': 'customer', 'xustomer': 'customer',
+    'vustomer': 'customer', 'custamer': 'customer', 'customar': 'customer',
+    'cusromer': 'customer', 'custpmer': 'customer', 'custoer': 'customer',
+    'teck': 'tech', 'yech': 'tech', 'twch': 'tech', 'tehc': 'tech',
+    'tecc': 'tech', 'tceh': 'tech', 'texh': 'tech', 'tevh': 'tech',
+    'hepl': 'help', 'hlep': 'help', 'hekp': 'help', 'jelp': 'help',
+    'gelp': 'help', 'hslp': 'help', 'hwlp': 'help', 'helo': 'help',
+    'halp': 'help', 'helb': 'help',
+    'onlien': 'online', 'onlne': 'online', 'omline': 'online',
+    'onine': 'online', 'onlime': 'online', 'onkine': 'online',
+    'oline': 'online', 'onlie': 'online', 'obline': 'online',
+    'onlinr': 'online', 'onlinw': 'online', 'onlune': 'online',
+    'noline': 'online', 'onlins': 'online', 'onlina': 'online',
+    'emial': 'email', 'emai': 'email', 'enail': 'email',
+    'eamil': 'email', 'emali': 'email', 'emaol': 'email',
+    'rmail': 'email', 'wmail': 'email', 'smail': 'email',
+    'dmail': 'email', 'emaikl': 'email', 'emaik': 'email',
+    'wev': 'web', 'qeb': 'web', 'wbe': 'web', 'wsb': 'web',
+    'wdb': 'web', 'wrb': 'web', 'wen': 'web', 'wem': 'web',
+    'eeb': 'web', 'wwb': 'web', 'weeb': 'web', 'webb': 'web',
+    'grpahic': 'graphic', 'grahpic': 'graphic', 'grphic': 'graphic',
+    'grapic': 'graphic', 'graphci': 'graphic', 'graphoc': 'graphic',
+    'graphuc': 'graphic', 'graohic': 'graphic', 'grsphic': 'graphic',
+    'digtal': 'digital', 'digtial': 'digital', 'digitsl': 'digital',
+    'dogital': 'digital', 'sigital': 'digital', 'figital': 'digital',
+    'difital': 'digital', 'digiral': 'digital', 'dihital': 'digital',
+    'soical': 'social', 'socail': 'social', 'sicial': 'social',
+    'aocial': 'social', 'docial': 'social', 'wocial': 'social',
+    'xocial': 'social', 'socisl': 'social', 'sociql': 'social',
+    'sociel': 'social', 'scial': 'social', 'socal': 'social',
+    'reak': 'real', 'resl': 'real', 'reql': 'real', 'rwal': 'real',
+    'teal': 'real', 'rela': 'real', 'reaal': 'real', 'eral': 'real',
+    'rewl': 'real', 'rezl': 'real', 'rael': 'real',
+    'foof': 'food', 'foox': 'food', 'fooc': 'food', 'foos': 'food',
+    'dood': 'food', 'goof': 'food', 'rood': 'food', 'fod': 'food',
+    'fpod': 'food', 'foid': 'food',
+    'cat': 'car', 'cae': 'car', 'xar': 'car', 'dar': 'car',
+    'var': 'car', 'cas': 'car', 'caf': 'car', 'cer': 'car',
+    'dof': 'dog', 'dig': 'dog', 'fog': 'dog', 'cog': 'dog'
+  };
+
+  // correct each word individually
+  var correctedWords = words.map(function(w) { return corrections[w] || w; });
+  correctedWords.push(tld);
+  var query = correctedWords.join(' ');
+  var encoded = encodeURIComponent(query);
+
+  document.getElementById('typed-domain').textContent = host;
+  document.getElementById('you-searched').textContent = 'Did you mean';
+  document.getElementById('search-query').textContent = query;
+  document.getElementById('nudge').textContent = 'You landed here by accident. We kept this page safe for you.';
+  document.getElementById('link-google').href = 'https://www.google.com/search?q=' + encoded;
+  document.getElementById('link-bing').href = 'https://www.bing.com/search?q=' + encoded;
+  document.getElementById('link-ddg').href = 'https://duckduckgo.com/?q=' + encoded;
+  document.title = 'Did you mean \u201c' + query + '\u201d?';
+
+  // Ad config: one sponsor per niche, keyed by TLD
+  // To add a sponsor: { icon: 'favicon url', name: 'Brand', desc: 'One line.', url: 'https://...', cta: 'Button text' }
+  var ads = {
+    // Add sponsors here as deals close:
+    // 'delivery': { icon: '...', name: '...', desc: '...', url: '...', cta: '...' },
+  };
+
+  var ad = ads[tld] || ads[query];
+  if (ad) {
+    var unit = document.getElementById('ad-unit');
+    unit.style.display = 'block';
+    document.getElementById('ad-icon').src = ad.icon;
+    document.getElementById('ad-name').textContent = ad.name;
+    document.getElementById('ad-desc').textContent = ad.desc;
+    document.getElementById('ad-link').href = ad.url;
+    document.getElementById('ad-cta').textContent = ad.cta || 'Visit';
+  }
+})();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
